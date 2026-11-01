@@ -1,0 +1,6 @@
+const assert=require('node:assert/strict'),E=require('./engine.js');
+for(const n of [4,6,12]){const {rows,cols}=E.grid(n);assert.equal(rows*cols,n);for(let i=0;i<50;i++){const order=E.shuffled(n);assert.equal(new Set(order).size,n);assert.equal(order.some((v,k)=>v!==k),true);}const g=E.create(n);assert.equal(E.place(g,1,0),false);assert.equal(g.used.size,0);assert.equal(E.place(g,0,0),true);assert.equal(E.place(g,0,1),false);assert.equal(E.place(g,1,0),false);for(let i=1;i<n;i++)assert(E.place(g,i,i));assert.equal(g.used.size,n);assert.equal(new Set(g.slots).size,n);assert.equal(E.matchingSlot(g,0),-1);}
+const g=E.create(4,[0,1,0,1]);assert(E.place(g,2,0));assert(E.place(g,0,2));assert(E.place(g,3,1));assert(E.place(g,1,3));assert.equal(g.used.size,4);
+assert.deepEqual(E.groupsFromPixels([Uint8Array.from([0,0,0,255]),Uint8Array.from([255,0,0,255]),Uint8Array.from([0,0,0,255])]),[0,1,0]);
+assert.equal(E.place(E.create(4),-1,0),false);assert.equal(E.place(E.create(4),4,0),false);assert.equal(E.place(E.create(4),0,1.5),false);assert.throws(()=>E.grid(8));
+console.log('PASS: grid dimensions, shuffling, incorrect/duplicate/out-of-bounds placements, full completion, identical-piece swaps, image grouping.');
